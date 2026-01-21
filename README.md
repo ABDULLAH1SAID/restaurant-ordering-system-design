@@ -9,7 +9,7 @@ Functions:
 - Manage account activation
 - Handle registration errors
  
-  ### 2️⃣ Feature: User Login
+### 2️⃣ Feature: User Login
 Functions:
 - Authenticate user
 - Validate credentials
