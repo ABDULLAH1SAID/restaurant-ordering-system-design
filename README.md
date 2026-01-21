@@ -7,3 +7,4 @@ Functions:
 - Create user account
 - Manage account activation
 - Handle registration errors
+  ### 
