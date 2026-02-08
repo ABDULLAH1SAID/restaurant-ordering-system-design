@@ -307,9 +307,9 @@ FUNCTION modifyCartItem(userId, itemId, action)
 END FUNCTION
 ```
 
+### 📌 Entity Relationship Diagram (ERD)
 
-
-
+![ERD](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/FOOD_DELIVERYERD.png)
 
 
 
