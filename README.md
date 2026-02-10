@@ -307,9 +307,20 @@ FUNCTION modifyCartItem(userId, itemId, action)
 END FUNCTION
 ```
 
-### 📌 Entity Relationship Diagram (ERD)
+### 📌 Food Delivery System – Database Design (ERD)
 
-![ERD](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/FOOD_DELIVERYERD.png)
+This diagram represents the **complete database design** for a Food Delivery System, including:
+
+- **User Management:** Handles users, roles, customers, addresses, and preferred payment settings.
+- **Restaurant & Menu:** Captures restaurants, their details, menus, and menu items.
+- **Cart & Order Management:** Supports customer carts, orders, order items, and order statuses.
+- **Payment System:** Integrates multiple payment methods, transaction records, configurations, and statuses.
+- **Auditing:** Logs user actions and changes across the system for tracking and accountability.
+
+This ERD provides a full overview of the entities, relationships, and structure needed for a scalable and production-ready food delivery platform.
+
+
+![Food Delivery DB Design](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/FOOD_DELIVERYERD.png)
 
 
 
