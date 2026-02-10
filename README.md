@@ -306,6 +306,7 @@ FUNCTION modifyCartItem(userId, itemId, action)
     }
 END FUNCTION
 ```
+---
 
 ### 📌 Food Delivery System – Database Design (ERD)
 
@@ -321,6 +322,17 @@ This ERD provides a full overview of the entities, relationships, and structure 
 
 
 ![Food Delivery DB Design](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/FOOD_DELIVERYERD.png)
+
+--- 
+
+### 🛒 Cart Management API
+
+This API allows you to manage the shopping cart: add items, modify quantities, remove items, or clear the cart entirely.
+
+| Operation      | Endpoint                 | Input                                      | Output Status Code | Description |
+|----------------|-------------------------|-------------------------------------------|------------------|------------|
+| Add to Cart    | `/api/v1/cart/add`       | cartItem, customerId
+
 
 
 
