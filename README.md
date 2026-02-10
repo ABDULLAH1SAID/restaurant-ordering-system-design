@@ -237,7 +237,7 @@ Shows the flow for updating cart items, including increasing, decreasing, and re
 
 ### 🔁 Sequence Diagram
 Demonstrates how cart modification requests propagate through system components.
-
+ 
 ![Modify Cart Sequence](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/SequenceDigram%20ModifyCart.png)
 
 ---
