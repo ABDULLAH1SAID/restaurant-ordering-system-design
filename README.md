@@ -331,7 +331,11 @@ This API allows you to manage the shopping cart: add items, modify quantities, r
 
 | Operation      | Endpoint                 | Input                                      | Output Status Code | Description |
 |----------------|-------------------------|-------------------------------------------|------------------|------------|
-| Add to Cart    | `/api/v1/cart/add`       | cartItem, customerId
+| Add to Cart    | `/api/v1/cart/add`       | cartItem, customerId                       | 201              | Adds a new item to the specified customer's cart. |
+| Clear Cart     | `/api/v1/cart/clear`     | cartId, customerId                         | 200              | Removes all items from the specified cart. |
+| Remove Item    | `/api/v1/cart/remove-item` | cartId, customerId, itemId                | 200              | Removes a specific item from the cart. |
+| Modify Cart    | `/api/v1/cart/modify`    | cartId, customerId, itemId, quantity      | 200              | Updates the quantity of an existing item in the cart. |
+
 
 
 
