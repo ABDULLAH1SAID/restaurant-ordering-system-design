@@ -81,13 +81,28 @@ Functions:
 - Apply coupon or discount
 
 ---
+### 📌 Food Delivery System – Database Design (ERD)
+
+This diagram represents the **complete database design** for a Food Delivery System, including:
+
+- **User Management:** Handles users, roles, customers, addresses, and preferred payment settings.
+- **Restaurant & Menu:** Captures restaurants, their details, menus, and menu items.
+- **Cart & Order Management:** Supports customer carts, orders, order items, and order statuses.
+- **Payment System:** Integrates multiple payment methods, transaction records, configurations, and statuses.
+- **Auditing:** Logs user actions and changes across the system for tracking and accountability.
+
+This ERD provides a full overview of the entities, relationships, and structure needed for a scalable and production-ready food delivery platform.
+
+
+![Food Delivery DB Design](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/FOOD_DELIVERYERD.png)
+
+--- 
 
 # 📐 Analysis & Design – Cart Module
 
 This section presents the **analysis and design of the Cart module**, covering both the **data layer** and **behavioral aspects** of the system.
 
 It includes:
-- Database design and data modeling
 - Control flow and system interactions
 - Core business logic for cart operations
 
@@ -98,75 +113,6 @@ The analysis focuses on the following core use cases:
 The goal is to provide a clear understanding of how the cart is structured, how data flows through the system, and how different components interact to support real-world e-commerce scenarios.
 
 --- 
-
-## 🗄️ Database Design (Cart Module)
-
-This section describes the database design for the **Cart module** in the restaurant ordering system.  
-The design focuses on managing user carts, cart items, and their relationship with menu items in a scalable and realistic e-commerce scenario.
-
-### 📌 Entity Relationship Diagram (ERD)
-
-![Cart ERD](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/ERD.png)
-
----
-
-### 🛒 CART
-
-Represents the shopping cart entity that groups selected menu items before checkout.
-
-**Attributes:**
-- `cart_id` (PK): Unique identifier for the cart
-- `total_price`: Cached total price of all items in the cart
-- `status`: Cart state (`ACTIVE`, `CHECKED_OUT`, `ABANDONED`)
-- `created_at`: Cart creation timestamp
-- `updated_at`: Last update timestamp
-
----
-
-### 📦 CART_ITEM
-
-Acts as a junction entity between **Cart** and **Menu Item**, representing items added to the cart.
-
-**Attributes:**
-- `cart_item_id` (PK): Unique identifier for the cart item
-- `cart_id` (FK): Reference to the associated cart
-- `item_id` (FK): Reference to the menu item
-- `quantity`: Number of units added
-- `unit_price`: Item price at the time of addition (price snapshot)
-
----
-
-### 🍔 MENU_ITEM
-
-Represents items available on restaurant menus.
-
-**Attributes:**
-- `item_id` (PK): Unique identifier for the menu item
-- `name`: Item name
-- `description`: Item description
-- `category`: Item category
-- `price`: Current item price
-
----
-
-### 🔗 Relationships
-
-- One **Cart** can contain multiple **Cart Items** (1 → N)
-- Each **Cart Item** belongs to one **Cart**
-- Each **Cart Item** refers to one **Menu Item**
-- A **Menu Item** can exist in multiple carts
-
----
-
-### 🧠 Design Decisions
-
-- The cart is treated as a standalone entity to support historical carts and future scalability.
-- `CART_ITEM` stores a snapshot of the item price (`unit_price`) to prevent inconsistencies if menu prices change.
-- Only one active cart exists per user at a time, while previous carts are preserved for history and order creation.
-- The cart total price is stored and recalculated on every cart modification to improve performance.
-- The design follows normalization principles while remaining optimized for real-world e-commerce systems.
-
----
 
 ## 🛒 Add to Cart
 
@@ -324,10 +270,28 @@ This ERD provides a full overview of the entities, relationships, and structure 
 ![Food Delivery DB Design](https://github.com/ABDULLAH1SAID/restaurant-ordering-system-design/blob/main/FoodDelivery/FOOD_DELIVERYERD.png)
 
 --- 
+### API Signature
 
-### 🛒 Cart Management API
+## 👤 User Registration & Authentication API
 
-This API allows you to manage the shopping cart: add items, modify quantities, remove items, or clear the cart entirely.
+| Operation        | Endpoint                  | Input                     | Output Status Code | Description |
+|------------------|---------------------------|---------------------------|------------------|------------|
+| Register         | `/api/v1/user/register`   | user_details {}            | 201              | Creates a new user account. |
+| Activate Account | `/api/v1/user/activate`   | activationToken            | 200              | Activates the user account via email verification. |
+| Login            | `/api/v1/user/login`      | username / email, password | 200 + Token      | Authenticates the user and returns an access token. |
+| Logout           | `/api/v1/user/logout`     | customerId                 | 200              | Logs out the user and invalidates the token. |
+| Reset Password   | `/api/v1/user/forgetpass` | email                      | 200              | Sends a password reset link or code to the user’s email. |
+
+## 🧑 User Profile Management API
+
+| Operation        | Endpoint                    | Input                          | Output Status Code | Description |
+|------------------|-----------------------------|--------------------------------|------------------|------------|
+| Get Profile      | `/api/v1/user/profile`      | customerId                     | 200              | Retrieves user profile information. |
+| Update Profile   | `/api/v1/user/update`       | customerId, user_details {}    | 200              | Updates user profile information. |
+| Change Password  | `/api/v1/user/change-pass`  | customerId, oldPassword, newPassword | 200        | Changes the user password. |
+| Delete Account   | `/api/v1/user/delete`       | customerId                     | 200              | Deletes the user account. |
+
+## 🛒 Cart Management API
 
 | Operation      | Endpoint                 | Input                                      | Output Status Code | Description |
 |----------------|-------------------------|-------------------------------------------|------------------|------------|
@@ -335,6 +299,42 @@ This API allows you to manage the shopping cart: add items, modify quantities, r
 | Clear Cart     | `/api/v1/cart/clear`     | cartId, customerId                         | 200              | Removes all items from the specified cart. |
 | Remove Item    | `/api/v1/cart/remove-item` | cartId, customerId, itemId                | 200              | Removes a specific item from the cart. |
 | Modify Cart    | `/api/v1/cart/modify`    | cartId, customerId, itemId, quantity      | 200              | Updates the quantity of an existing item in the cart. |
+
+## 📦 Order Management API
+
+| Operation        | Endpoint                    | Input                                   | Output Status Code | Description |
+|------------------|-----------------------------|------------------------------------------|------------------|------------|
+| Create Order     | `/api/v1/order/create`      | cartId, customerId, addressId, paymentMethod | 201              | Creates a new order from the user's cart. |
+| Get Order By ID  | `/api/v1/order/{orderId}`   | orderId, customerId                      | 200              | Retrieves order details by order ID. |
+| Get User Orders  | `/api/v1/order/my-orders`   | customerId                               | 200              | Retrieves all orders for the logged-in user. |
+| Cancel Order     | `/api/v1/order/cancel`      | orderId, customerId                      | 200              | Cancels an order if it is still pending. |
+| Update Order Status | `/api/v1/order/update-status` | orderId, status                        | 200              | Updates the order status (Admin only). |
+
+## 🍽️ Restaurant & Menu Management API
+
+| Operation              | Endpoint                              | Input                                      | Output Status Code | Description |
+|------------------------|---------------------------------------|--------------------------------------------|------------------|------------|
+| Create Restaurant      | `/api/v1/restaurant/create`           | restaurant_details {}                       | 201              | Creates a new restaurant. |
+| Update Restaurant      | `/api/v1/restaurant/update`           | restaurantId, restaurant_details {}         | 200              | Updates restaurant information. |
+| Get Restaurants        | `/api/v1/restaurant/list`             | —                                          | 200              | Retrieves all restaurants. |
+| Get Restaurant By ID   | `/api/v1/restaurant/{restaurantId}`   | restaurantId                               | 200              | Retrieves restaurant details. |
+| Delete Restaurant      | `/api/v1/restaurant/delete`           | restaurantId                               | 200              | Deletes a restaurant (Admin only). |
+| Create Menu Item       | `/api/v1/menu/create`                 | restaurantId, menu_item_details {}          | 201              | Adds a new menu item to a restaurant. |
+| Update Menu Item       | `/api/v1/menu/update`                 | menuItemId, menu_item_details {}            | 200              | Updates menu item details. |
+| Delete Menu Item       | `/api/v1/menu/delete`                 | menuItemId                                 | 200              | Deletes a menu item. |
+| Get Menu By Restaurant | `/api/v1/menu/{restaurantId}`         | restaurantId                               | 200              | Retrieves menu items for a restaurant. |
+
+## 💳 Payment Integration API
+
+| Operation          | Endpoint                      | Input                                   | Output Status Code | Description |
+|--------------------|-------------------------------|------------------------------------------|------------------|------------|
+| Create Payment     | `/api/v1/payment/create`      | orderId, paymentMethod                   | 201              | Initiates a payment for an order. |
+| Process Payment    | `/api/v1/payment/process`     | paymentId, paymentDetails {}             | 200              | Processes the payment transaction. |
+| Verify Payment     | `/api/v1/payment/verify`      | paymentId                                | 200              | Verifies payment status with the payment gateway. |
+| Payment Callback   | `/api/v1/payment/callback`    | transactionData {}                       | 200              | Handles payment gateway callbacks/webhooks. |
+| Refund Payment     | `/api/v1/payment/refund`      | paymentId, reason                        | 200              | Refunds a completed payment. |
+
+
 
 
 
